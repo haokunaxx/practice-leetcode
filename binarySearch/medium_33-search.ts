@@ -50,48 +50,63 @@ function search(nums: number[], target: number): number {
       res = m
       break
     }
-    // TODO:优化判断逻辑
     // console.log(m)
-    if (nums[p] < target) {
-      if (nums[m] < target) {
-        if(nums[m] >= nums[p]){
+    if (nums[m] < target) {
+      if (nums[m] > nums[p]) {
+        p = m + 1
+      } else {
+        if (nums[p] > target) {
           p = m + 1
-        }else{
-          p++
+        } else {
+          q = m - 1
+        }
+      }
+    } else {
+      if (nums[m] > nums[p]) {
+        if (nums[p] > target) {
+          p = m + 1
+        } else {
           q = m - 1
         }
       } else {
         q = m - 1
       }
-    } else if (nums[p] > target) {
-      if (nums[m] > target) {
-        if (nums[m] >= nums[p]) {
-          p = m + 1
-        } else {
-          p++
-          q = m - 1
-        }
-      } else {
-        p = m + 1
-      }
-    } else {
-      res = p
-      break
     }
   }
   return res
 }
 
-console.log(search([4, 5, 6, 7, 0, 1, 2], 0))   //4
-console.log(search([4, 5, 6, 7, 8, 9, 0, 1, 2], 9))   //5
-console.log(search([4, 5, 0, 1, 2], 3))   //-1
-console.log(search([4, 5, 6, 7, 0, 1, 2], 3))   //-1
-console.log(search([1], 0))   //-1
-console.log(search([1], 2))   //-1
-console.log(search([1, 3], 1))   //0
-console.log(search([5, 1, 2, 3, 4], 1)) //1
-console.log(search([3, 1], 1))   //1
-console.log(search([8, 9, 2, 3, 4], 9))   //1
+// console.log(search([4, 5, 6, 7, 0, 1, 2], 0))   //4
+// console.log(search([4, 5, 6, 7, 8, 9, 0, 1, 2], 9))   //5
+// console.log(search([4, 5, 0, 1, 2], 3))   //-1
+// console.log(search([1], 0))   //-1
+// console.log(search([1], 2))   //-1
+// console.log(search([1, 3], 1))   //0
+
+// console.log(search([2, 3, 4, 6, 7, 0, 1], 3))   //中间值大于目标值，我那个左找
+// console.log(search([4, 5, 6, 7, 0, 1, 2], 3))  //中间值大于目标值，往右找
+// console.log(search([5, 1, 2, 3, 4], 1)) 中间值大于目标值，往左找
+
+// console.log(search([3, 1], 1))   //1
+// console.log(search([8, 9, 2, 3, 4], 9))   //1
+console.log(search([5, 1, 3], 3))
 
 
 // [4,5,6,7,0,1,2] 
+
+/*
+  取中位数
+    nums[m] = target => 跳出循环
+    nums[m] < target
+      nums[m] >= nums[p] => p 到 m 为递增区间 => p = m + 1 
+      nums[m] < nums[p] => p 到 m 分别处于不同区间
+        可能在 p 对应的递增区间内，也可能在m 所在的区间内
+          nums[p] < target => q = m - 1
+          nums[p] > target => p = m + 1 
+    nums[m] > target
+      nums[m] >= nums[p] => p 到 m 为递增区间
+        nums[p] > target => p = m + 1 
+        nums[p] < target => q = m - 1
+      nums[m] < nums[p] => p 和 m 分别在不同区间
+        q = m - 1
+*/
